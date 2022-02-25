@@ -86,13 +86,13 @@ public class Profesores {
 	}
 
 
-	       public List<String> representar() {
-	    	   List<String> representacion = new ArrayList<>();
-	    	   for (Profesor profesor : coleccionProfesores){
-	    		   representacion.add(profesor.toString());
-	    	   }
-	    	   return representacion;
-	       }
+	public List<String> representar() {
+		List<String> representacion = new ArrayList<>();
+		for (Profesor profesor : coleccionProfesores){
+			representacion.add(profesor.toString());
+		}
+		return representacion;
+	}
 
 
 

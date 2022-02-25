@@ -21,8 +21,7 @@ public class Consola {
 		mostrarCabecera("Gestión para profesores de reserva de aula");
 		int i=0;
 		for (Opcion opcion: Opcion.values()) {
-			System.out.println(i + "." + opcion);
-			//System.out.println( i  opcion);                                               
+			System.out.println(i + "." + opcion);                                        
 			i++;
 		}
 	}

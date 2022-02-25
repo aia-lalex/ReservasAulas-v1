@@ -1,5 +1,7 @@
 package org.iesalandalus.programacion.reservasaulas.mvc.controlador;
 
+import java.util.List;
+
 import javax.naming.OperationNotSupportedException;
 
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.Modelo;
@@ -46,23 +48,23 @@ public class Controlador {
 	public void borrarAula(Aula aula) throws OperationNotSupportedException {
 		modelo.borrarAula(aula);
 	}
-	public void borrarProfesor(Profesor profesor) throws
-	OperationNotSupportedException {
+	public void borrarProfesor(Profesor profesor) throws OperationNotSupportedException {
 		modelo.borrarProfesor(profesor);
-	}
+	}		
 	public Aula buscarAula(Aula aula) {
 		return modelo.buscarAula(aula);
 	}
+
 	public Profesor buscarProfesor(Profesor profesor) {
 		return modelo.buscarProfesor(profesor);
 	}
-	public String[] representarAulas() {
+	public List<String> representarAulas() {
 		return modelo.representarAulas();
 	}
-	public String[] representarProfesores() {
+	public List<String> representarProfesores() {
 		return modelo.representarProfesores();
 	}
-	public String[] representarReservas() {
+	public List<String> representarReservas() {
 		return modelo.representarReservas();
 	}
 	public void realizarReserva(Reserva reserva) throws
@@ -73,13 +75,13 @@ public class Controlador {
 	OperationNotSupportedException {
 		modelo.anularReserva(reserva);
 	}
-	public Reserva[] getReservasAula(Aula aula) {
+	public List<Reserva> getReservasAula(Aula aula) {
 		return modelo.getReservasAula(aula);
 	}
-	public Reserva[] getReservasProfesor(Profesor profesor) {
+	public List<Reserva> getReservasProfesor(Profesor profesor) {
 		return modelo.getReservasProfesor(profesor);
 	}
-	public Reserva[] getReservasPermanencia(Permanencia permanencia) {
+	public List<Reserva> getReservasPermanencia(Permanencia permanencia) {
 		return modelo.getReservasPermanencia(permanencia);
 	}
 	public boolean consultarDisponibilidad(Aula aula, Permanencia permanecia) {
