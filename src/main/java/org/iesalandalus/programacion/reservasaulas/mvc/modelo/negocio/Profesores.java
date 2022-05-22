@@ -1,6 +1,7 @@
 package org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.naming.OperationNotSupportedException;
@@ -18,18 +19,12 @@ public class Profesores {
 	}
 
 	public Profesores (Profesores profesores) {
-		setProfesores(profesores);
-	}
-
-
-
-	private void setProfesores(Profesores profesores) {
 		if (profesores == null) {
-			throw new IllegalArgumentException("No se pueden copiar profesores nulos.");
+			throw new NullPointerException("ERROR: No se pueden copiar profesores nulos.");
 		}
-		coleccionProfesores = copiaProfundaProfesores(profesores.coleccionProfesores);
-
+		this.coleccionProfesores = profesores.getProfesores();
 	}
+
 
 	private List<Profesor> copiaProfundaProfesores(List<Profesor> profesores) {
 		List<Profesor> otrosProfesores = new ArrayList<>();
@@ -49,42 +44,49 @@ public class Profesores {
 		return coleccionProfesores.size();
 	}
 
-	public void insertar(Profesor profesor) throws OperationNotSupportedException {
-		if (profesor == null) {
-			throw new IllegalArgumentException("No se puede insertar un profesor nulo.");
+
+
+		public void insertar(Profesor profesor) throws OperationNotSupportedException {
+			if (profesor == null) {
+				throw new NullPointerException("ERROR: No se puede insertar un profesor nulo.");
+			}
+			if (coleccionProfesores.contains(profesor)) {
+				throw new OperationNotSupportedException("ERROR: Ya existe un profesor con ese nombre.");
+			} else {
+				coleccionProfesores.add(profesor);
+			}
+
 		}
-
-		if (coleccionProfesores.contains(profesor))
-		{
-			throw new OperationNotSupportedException("El profesor ya existe.");
-		}
-		else coleccionProfesores.add(new Profesor(profesor));
-
-
-	}
-
-
-	public Profesor buscar(Profesor profesor) {
-		int indice = coleccionProfesores.indexOf(profesor);
-
-		if (indice != -1) {
-			return new Profesor (coleccionProfesores.get(indice));
-		} else {
+		public Profesor buscar(Profesor profesor) throws IllegalArgumentException, NullPointerException {
+			if (profesor == null) {
+				throw new NullPointerException("ERROR: No se puede buscar un profesor nulo.");
+			}
+			Iterator<Profesor> it = coleccionProfesores.iterator();
+			while (it.hasNext()) {
+				if (it.next().equals(profesor)) {
+					return new Profesor(profesor);
+				}
+			}
 			return null;
+
 		}
-	}
-
-
+		
 	public void borrar(Profesor profesor) throws OperationNotSupportedException {
 		if (profesor == null) {
-			throw new IllegalArgumentException("No se puede borrar un profesor nulo.");
+			throw new NullPointerException("ERROR: No se puede borrar un profesor nulo.");
 		}
-
-		if (!coleccionProfesores.remove(profesor)) {
-			throw new OperationNotSupportedException("El profesor a borrar no existe.");
+		boolean borrado = false;
+		Iterator<Profesor> it = coleccionProfesores.iterator();
+		while (it.hasNext()) {
+			if (it.next().equals(profesor)) {
+				it.remove();
+				borrado = true;
+			}
 		}
+		if (!borrado) {
+			throw new OperationNotSupportedException("ERROR: No existe ningún profesor con ese nombre.");
+		} 
 	}
-
 
 	public List<String> representar() {
 		List<String> representacion = new ArrayList<>();

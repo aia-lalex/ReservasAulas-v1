@@ -1,6 +1,7 @@
 package org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.naming.OperationNotSupportedException;
@@ -22,17 +23,13 @@ public class Aulas {
 	}
 
 	public Aulas(Aulas aulas) {
-		setAulas(aulas);
-
-	}
-
-	private void setAulas(Aulas aulas) {
 		if (aulas == null) {
-			throw new IllegalArgumentException("ERROR: No se pueden copiar aulas nulas.");
+			throw new NullPointerException("ERROR: No se pueden copiar aulas nulas.");
 		}
-		coleccionAulas = copiaProfundaAulas(aulas.coleccionAulas);
-
+		coleccionAulas = aulas.getAulas();
 	}
+	
+
 
 	public List<Aula> getAulas() {
 		return copiaProfundaAulas(coleccionAulas);
@@ -71,6 +68,19 @@ public class Aulas {
 		if (!coleccionAulas.remove(aula)) {
 			throw new OperationNotSupportedException("ERROR: El aula a borrar no existe.");
 		}
+	}
+	public Aula buscar(Aula aula) throws IllegalArgumentException, NullPointerException {
+		if (aula == null) {
+			throw new NullPointerException("ERROR: No se puede buscar un aula nula.");
+		}
+		Iterator<Aula> it = coleccionAulas.iterator();
+		while (it.hasNext()) {
+			if (it.next().equals(aula)) {
+				return new Aula(aula);
+			}
+		}
+		return null;
+
 	}
 
 
