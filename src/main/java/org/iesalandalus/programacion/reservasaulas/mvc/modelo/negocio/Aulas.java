@@ -9,18 +9,16 @@ import javax.naming.OperationNotSupportedException;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Aula;
 
 public class Aulas {
+	
+	
 
-	private List <Aula> coleccionAulas;
+	private List <Aula> coleccionAulas = new ArrayList<>();
 
+	public Aulas() {
+
+	}
 	// constructor por defecto
 
-	public Aulas(int capacidad) throws IllegalArgumentException,
-	NullPointerException {
-		if (capacidad < 1) {
-			throw new IllegalArgumentException("ERROR: La capacidad debe ser mayor que cero.");
-		}
-		coleccionAulas = new ArrayList<>();
-	}
 
 	public Aulas(Aulas aulas) {
 		if (aulas == null) {
@@ -32,16 +30,18 @@ public class Aulas {
 
 
 	public List<Aula> getAulas() {
-		return copiaProfundaAulas(coleccionAulas);
+		return copiaProfundaAulas();
 	}
 
-	private List<Aula> copiaProfundaAulas(List<Aula> aulas) {
-		List<Aula> otrasAulas = new ArrayList<>();
-		for (Aula aula : aulas) {
-			otrasAulas.add(new Aula(aula));
+	private List<Aula> copiaProfundaAulas() throws IllegalArgumentException, NullPointerException {
+		List<Aula> copiaAulas = new ArrayList<>();
+		Iterator<Aula> it = coleccionAulas.iterator();
+		while (it.hasNext()) {
+			copiaAulas.add(new Aula(it.next()));
 		}
-		return otrasAulas;
+		return copiaAulas;
 	}
+	
 
 	public int getNumAulas() {
 		return coleccionAulas.size();
@@ -49,7 +49,7 @@ public class Aulas {
 
 	public void insertar(Aula aula) throws OperationNotSupportedException {
 		if (aula == null) {
-			throw new IllegalArgumentException("ERROR: No se puede insertar un aula nula.");
+			throw new NullPointerException("ERROR: No se puede insertar un aula nula.");
 		}
 		if (coleccionAulas.contains(aula)){
 			throw new OperationNotSupportedException("ERROR: No se aceptan más aulas.");
@@ -62,13 +62,21 @@ public class Aulas {
 
 	public void borrar(Aula aula) throws OperationNotSupportedException {
 		if (aula == null) {
-			throw new IllegalArgumentException("ERROR: No se puede borrar un aula nula.");
+			throw new NullPointerException("ERROR: No se puede borrar un aula nula.");
 		}
-
-		if (!coleccionAulas.remove(aula)) {
-			throw new OperationNotSupportedException("ERROR: El aula a borrar no existe.");
+		boolean borrado = false;
+		Iterator<Aula> it = coleccionAulas.iterator();
+		while (it.hasNext()) {
+			if (it.next().equals(aula)) {
+				it.remove();
+				borrado = true;
+			}
 		}
+		if (!borrado) {
+			throw new OperationNotSupportedException("ERROR: No existe ningún aula con ese nombre.");
+		} 
 	}
+	
 	public Aula buscar(Aula aula) throws IllegalArgumentException, NullPointerException {
 		if (aula == null) {
 			throw new NullPointerException("ERROR: No se puede buscar un aula nula.");
@@ -87,13 +95,13 @@ public class Aulas {
 	// To string
 
 	public List<String> representar() {
-		List<String> representacion = new ArrayList<>();
-		for ( Aula aula : coleccionAulas){
-			representacion.add(aula.toString());
+		List<String> cadena = new ArrayList<>();
+		Iterator<Aula> it = coleccionAulas.iterator();
+		while (it.hasNext()) {
+			cadena.add(it.next().toString());
 		}
-		return representacion;
+		return cadena;
 	}
-
 
 
 }

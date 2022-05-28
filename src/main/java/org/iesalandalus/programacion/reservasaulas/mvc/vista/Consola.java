@@ -59,16 +59,23 @@ public class Consola {
 	}            
 
 	public static Profesor leerProfesor() {
+		Profesor profesor = null;
 		System.out.println("Introduce el nombre: ");
 		String nombre = Entrada.cadena();
 		System.out.println("Introduce el correo: ");
 		String correo = Entrada.cadena();
 		System.out.println("Introduce el teléfono: ");
 		String telefono = Entrada.cadena();
-
-		return new Profesor(nombre, correo,telefono);
+		if (telefono == null || telefono.trim().equals("")) {
+			profesor = new Profesor(nombre, correo);
+		} else {
+			profesor = new Profesor(nombre, correo, telefono);
+		}
+		return profesor;
 	}
 
+	
+	
 	public static String leerNombreProfesor() {
 		String nombre;
 		do {
@@ -111,21 +118,19 @@ public class Consola {
 
 	public static LocalDate leerDia()
 	{
-		String dia;
-		boolean diaCorrecto = false;
+		boolean centinela = false;
+		LocalDate fecha = null;
 		do {
-			System.out.println("Introduce el día (dd/mm/aaaa): ");
-			dia = Entrada.cadena();
+			System.out.print("Introduce la fecha con formato dd/mm/yyyy: ");
+			String cadena = Entrada.cadena();
 			try {
-				LocalDate.parse(dia, FORMATO_DIA);
-				diaCorrecto = true;
-			} catch (DateTimeParseException e) {
-				diaCorrecto = false;
+				fecha = LocalDate.parse(cadena, FORMATO_DIA);
+				centinela = true;
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
 			}
-		} while (!diaCorrecto);
-		LocalDate fecha=LocalDate.parse(dia, FORMATO_DIA);
-
+		} while (!centinela);
 		return fecha;
-
 	}
+	
 }

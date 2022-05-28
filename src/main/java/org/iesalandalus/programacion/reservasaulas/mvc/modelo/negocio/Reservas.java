@@ -1,9 +1,11 @@
 package org.iesalandalus.programacion.reservasaulas.mvc.modelo.negocio;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.naming.OperationNotSupportedException;
+
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Aula;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Permanencia;
 import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Profesor;
@@ -11,47 +13,44 @@ import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Reserva;
 
 public class Reservas {
 
-	private List<Reserva> coleccionReservas;
+	private List<Reserva> coleccionReservas = new ArrayList<>();
 
 	public Reservas() {
-		coleccionReservas = new ArrayList<>();
+		
 	}
 
-
-	public Reservas (Reservas reservas) {			
-		setReservas(reservas);
-	}
-
-
-
-	private void setReservas(Reservas reservas) {
+	
+	
+	public Reservas(Reservas reservas) {
 		if (reservas == null) {
-			throw new IllegalArgumentException("ERROR: No se pueden copiar reservas nulas.");
+			throw new NullPointerException("ERROR: No se pueden copiar reservas nulas.");
 		}
-		coleccionReservas = copiaProfundaReservas(reservas.coleccionReservas);
-
+		coleccionReservas = reservas.getReservas();
 	}
 
 
-	private List<Reserva> copiaProfundaReservas(List<Reserva> reservas) {
-		List<Reserva> otrasReservas = new ArrayList<>() ;
-		for (Reserva reserva : reservas) {
-			otrasReservas.add(new Reserva(reserva));
+	private List<Reserva> copiaProfundaReservas() {
+		List<Reserva> copiaReservas = new ArrayList<>();
+		Iterator<Reserva> it = coleccionReservas.iterator();
+		while (it.hasNext()) {
+			copiaReservas.add(new Reserva(it.next()));
 		}
-		return otrasReservas;
+		return copiaReservas;
 	}
+	
 
+	
 	public List<Reserva> getReservas() {
-		return copiaProfundaReservas(coleccionReservas);
+		return copiaProfundaReservas();
 	}
-
+	
 	public int getNumReservas() {
 		return coleccionReservas.size();
 	}
 
 	public void insertar(Reserva reserva) throws OperationNotSupportedException {
 		if (reserva == null) {
-			throw new IllegalArgumentException("No se puede realizar una reserva nula.");
+			throw new NullPointerException("No se puede realizar una reserva nula.");
 		}
 		if ( coleccionReservas.contains(reserva)){
 			throw new OperationNotSupportedException("La reserva ya existe.");
@@ -74,28 +73,34 @@ public class Reservas {
 
 	public void borrar(Reserva reserva) throws OperationNotSupportedException {
 		if (reserva == null) {
-			throw new IllegalArgumentException("No se puede anular una reserva nula.");
+			throw new NullPointerException("ERROR: No se puede anular una reserva nula.");
 		}
-
-		if (!coleccionReservas.remove(reserva)) {
-			throw new OperationNotSupportedException("La reserva a anular no existe.");
+		boolean borrado = false;
+		Iterator <Reserva> it = coleccionReservas.iterator();
+		while (it.hasNext()) {
+			if (it.next().equals(reserva)) {
+				it.remove();
+				borrado = true;
+			}
 		}
+		if (!borrado) {
+			throw new OperationNotSupportedException("ERROR: La reserva a anular no existe.");
+		} 
 	}
 
 
-
 	public List<String> representar() {
+		
 		List<String> representacion = new ArrayList<>();
-		for (Reserva reserva : coleccionReservas) {
+        for (Reserva reserva : coleccionReservas) {
 			representacion.add(reserva.toString());
 		}
 		return representacion;
 	}
 
-
 	public List<Reserva> getReservasAula(Aula aula) {
 		if(aula==null)
-			throw new IllegalArgumentException("No se pueden comprobar las reservas realizadas sobre un aula nula.");
+			throw new NullPointerException("No se pueden comprobar las reservas realizadas sobre un aula nula.");
 		List<Reserva> reservaAula = new ArrayList<>();
 
 		for (Reserva reserva : coleccionReservas) {
@@ -112,7 +117,7 @@ public class Reservas {
 	public List<Reserva> getReservasProfesor(Profesor profesor) {
 
 		if(profesor==null)
-			throw new IllegalArgumentException("No se pueden comprobar las reservas de un profesor nulo.");
+			throw new NullPointerException("No se pueden comprobar las reservas de un profesor nulo.");
 		List<Reserva> reservaProfesor = new ArrayList<>();
 
 		for (Reserva reserva : coleccionReservas) {
@@ -128,7 +133,7 @@ public class Reservas {
 
 	public List<Reserva> getReservasPermanencia(Permanencia permanencia) {
 		if(permanencia==null)
-			throw new IllegalArgumentException("No se pueden consultar las reservas de una permanencia nula.");
+			throw new NullPointerException("No se pueden consultar las reservas de una permanencia nula.");
 		List<Reserva> reservaPermanencia = new ArrayList<>();
 
 		for (Reserva reserva : coleccionReservas) {
@@ -141,13 +146,22 @@ public class Reservas {
 
 
 	public boolean consultarDisponibilidad(Aula aula, Permanencia permanencia) {
-		if(aula==null)
-			throw new IllegalArgumentException("No se puede consultar la disponibilidad de un aula nula.");
-		if(permanencia==null)
-			throw new IllegalArgumentException("No se puede consultar la disponibilidad de una permanencia nula.");
-		for(Reserva reserva : coleccionReservas) {
-			if(coleccionReservas.equals(aula) && coleccionReservas.equals(permanencia))
-				return false;
+		if (aula == null) {
+			throw new NullPointerException("ERROR: No se puede consultar la disponibilidad de un aula nula.");
+		} 
+		if (permanencia == null) {
+			throw new NullPointerException("ERROR: No se puede consultar la disponibilidad de una permanencia nula.");
+		}
+		List<Reserva> copiaReservas = getReservasAula(aula);
+		if (copiaReservas.isEmpty()) {
+			return true;
+		}  else {
+			Iterator<Reserva> it = copiaReservas.iterator();
+			while (it.hasNext()) {
+				if (it.next().getPermanencia().equals(permanencia)) {
+					return false;
+				}
+			}
 		}
 		return true;
 	}

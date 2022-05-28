@@ -13,15 +13,15 @@ import org.iesalandalus.programacion.reservasaulas.mvc.vista.Vista;
 
 public class Controlador {
 
-	Vista vista;
-	Modelo modelo;
+	private Vista vista;
+	private Modelo modelo;
 	// constructor
 	public Controlador(Modelo modelo, Vista vista) {
 		if (modelo == null) {
-			throw new IllegalArgumentException("ERROR: El modelo no	puede ser nulo.");
+			throw new NullPointerException("ERROR: El modelo no	puede ser nulo.");
 		}
 		if (vista == null) {
-			throw new IllegalArgumentException("ERROR: La vista no puede ser nula.");
+			throw new NullPointerException("ERROR: La vista no puede ser nula.");
 		}
 		this.modelo = modelo;
 		this.vista = vista;

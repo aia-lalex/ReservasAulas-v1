@@ -16,12 +16,11 @@ public class Modelo {
 	private Profesores profesores;
 	private Aulas aulas;
 	private Reservas reservas;
-	private Modelo modelo;
-	private static int CANTIDAD=20;
+
 
 	public Modelo() {
-		this.profesores = new Profesores(CANTIDAD);
-		this.aulas = new Aulas(CANTIDAD);
+		this.profesores = new Profesores();
+		this.aulas = new Aulas();
 		this.reservas = new Reservas();
 	}
 
@@ -29,18 +28,20 @@ public class Modelo {
 		return aulas.getAulas();
 	}
 
-	public int getNumAulas() {
-		return getAulas().size();
-	}
 
+	public int getNumAulas() {
+
+		return aulas.getNumAulas();
+	}
+	
 	public List<String> representarAulas() {
 		return aulas.representar();
 	}
 
+	
 	public Aula buscarAula(Aula aula) {
-		return modelo.buscarAula(aula);
+		return aulas.buscar(aula);
 	}
-		
 	
 	public void insertarAula(Aula insertar) throws OperationNotSupportedException {
 		aulas.insertar(insertar);
@@ -50,12 +51,12 @@ public class Modelo {
 		aulas.borrar(borrar);
 	}
 
-	public Profesor[] getProfesores() {
-		return getProfesores();
+	public List<Profesor> getProfesores() {
+		return profesores.getProfesores();
 	}
 
 	public int getNumProfesores() {
-		return getNumProfesores();
+		return profesores.getNumProfesores();
 	}
 
 	public List<String> representarProfesores() {

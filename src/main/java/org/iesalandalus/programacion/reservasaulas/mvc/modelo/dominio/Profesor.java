@@ -67,27 +67,26 @@ public class Profesor {
 		if (nombre.trim().equals("")) {
 			throw new IllegalArgumentException("ERROR: El nombre del profesor no puede estar vacío.");
 		}
-		this.nombre = nombre;
+		this.nombre = formateaNombre(nombre);
 	}
 
-	private String formateaNombre(String nombre){ // Formateo del nombre, eliminamos espacios y ponemos la primera en mayuscula
-		
-		char priLetra;
-		String mayusculas; 
-		String nombreFormateado="";
-		nombre = nombre.trim(); // Eliminamos espacio y tabulaciones
-		String [] nombr = nombre.replaceAll("\\s{2,}", " ").split(" ");
-		
-		for (int i=0; i<nombr.length; i++) {
-			priLetra = nombr[i].charAt(0);
-			mayusculas = priLetra+"".toUpperCase();
-			nombreFormateado += mayusculas+nombr[i].substring(1).toLowerCase() + " ";
+	
+	private String formateaNombre(String nombre) {
+
+		nombre = nombre.replaceAll("\\s{2,}", " ").trim();
+
+		String[] palabras = nombre.split(" ");
+		String nuevoNombre = "";
+		for (int i = 0; i <= palabras.length - 1; i++) {
+
+			palabras[i] = palabras[i].substring(0, 1).toUpperCase() + palabras[i].substring(1).toLowerCase();
+
+			nuevoNombre += palabras[i] + " ";
 		}
-
-		nombreFormateado = nombreFormateado.substring(0,nombreFormateado.length()-1);
-		
-		return nombreFormateado;
+		nombre = nuevoNombre.trim();
+		return nombre;
 	}
+	
 	
 	@Override
 	public int hashCode() {

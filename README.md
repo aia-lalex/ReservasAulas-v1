@@ -1,7 +1,7 @@
 # Tarea Reservas de Aulas
 ## Profesor: Andrés Rubio del Río
 ## Alumno: Alejandro Hurtado Navarro
-
+ 
 Desde el IES Al-Ándalus nos acaban de comentar que por favor eliminemos la restricción de tamaño en los datos de la aplicación. Por lo que decidimos utilizar estructuras dinámicas de datos, en concreto Listas. Para las diferentes clases del modelo que contienen las colecciones de objetos del dominio (las que están incluidas en el paquete **negocio**) deberemos sustituir los **Array** por **ArrayList** y, cómo no, ajustar los diferentes métodos para que sigan haciendo lo mismo que antes, pero utilizando las nuevas estructuras de datos. Como observarás, los métodos privados que teníamos antes desaparecen ya que ahora no serán necesarios.
 
 El diagrama de clases queda como te muestro a continuación y poco a poco te iré explicando los diferentes pasos a realizar:

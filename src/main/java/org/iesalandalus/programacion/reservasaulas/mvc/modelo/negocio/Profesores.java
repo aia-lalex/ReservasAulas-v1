@@ -10,12 +10,10 @@ import org.iesalandalus.programacion.reservasaulas.mvc.modelo.dominio.Profesor;
 
 public class Profesores {
 
-	private List <Profesor> coleccionProfesores;
+	private List <Profesor> coleccionProfesores = new ArrayList<>();
 
-
-
-	public Profesores(int capacidad) {
-		coleccionProfesores = new ArrayList<>();
+	public Profesores( ) {
+		
 	}
 
 	public Profesores (Profesores profesores) {
@@ -24,20 +22,20 @@ public class Profesores {
 		}
 		this.coleccionProfesores = profesores.getProfesores();
 	}
+	
 
-
-	private List<Profesor> copiaProfundaProfesores(List<Profesor> profesores) {
-		List<Profesor> otrosProfesores = new ArrayList<>();
-		for (Profesor profesor : profesores){
-			otrosProfesores.add(new Profesor(profesor));
+	private List<Profesor> copiaProfundaProfesores() throws IllegalArgumentException, NullPointerException {
+		List<Profesor> copiaProfesores = new ArrayList<>();
+		Iterator<Profesor> it = coleccionProfesores.iterator();
+		while (it.hasNext()) {
+			copiaProfesores.add(new Profesor(it.next()));
 		}
-		return otrosProfesores;
+		return copiaProfesores;
 	}
 
 	public List<Profesor> getProfesores() {
-		return copiaProfundaProfesores(coleccionProfesores);
+		return copiaProfundaProfesores();
 	}
-
 
 
 	public int getNumProfesores() {
@@ -71,31 +69,32 @@ public class Profesores {
 
 		}
 		
-	public void borrar(Profesor profesor) throws OperationNotSupportedException {
-		if (profesor == null) {
-			throw new NullPointerException("ERROR: No se puede borrar un profesor nulo.");
-		}
-		boolean borrado = false;
-		Iterator<Profesor> it = coleccionProfesores.iterator();
-		while (it.hasNext()) {
-			if (it.next().equals(profesor)) {
-				it.remove();
-				borrado = true;
+		public void borrar(Profesor profesor) throws OperationNotSupportedException {
+			if (profesor == null) {
+				throw new NullPointerException("ERROR: No se puede borrar un profesor nulo.");
 			}
+			boolean borrado = false;
+			Iterator<Profesor> it = coleccionProfesores.iterator();
+			while (it.hasNext()) {
+				if (it.next().equals(profesor)) {
+					it.remove();
+					borrado = true;
+				}
+			}
+			if (!borrado) {
+				throw new OperationNotSupportedException("ERROR: No existe ningún profesor con ese nombre.");
+			} 
 		}
-		if (!borrado) {
-			throw new OperationNotSupportedException("ERROR: No existe ningún profesor con ese nombre.");
-		} 
-	}
+
 
 	public List<String> representar() {
-		List<String> representacion = new ArrayList<>();
-		for (Profesor profesor : coleccionProfesores){
-			representacion.add(profesor.toString());
+		List<String>  cadena = new ArrayList<>();;
+		Iterator<Profesor> it = coleccionProfesores.iterator();
+		while (it.hasNext()) {
+			cadena.add(it.next().toString());
 		}
-		return representacion;
+		return cadena;
 	}
-
 
 
 }
